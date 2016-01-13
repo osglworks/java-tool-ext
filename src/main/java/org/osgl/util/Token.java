@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * A token is tool to generate a string with an ID and optionally a
@@ -22,6 +21,7 @@ import java.util.UUID;
  *     without the need for login with password
  * </p>
  */
+@SuppressWarnings("unused")
 public class Token implements Serializable {
     public static enum Life {
         /**
@@ -48,13 +48,13 @@ public class Token implements Serializable {
 
         private long seconds;
 
-        private Life(long seconds) {
+        Life(long seconds) {
             this.seconds = seconds;
         }
 
         /**
          * Return the due time in time millis
-         * @return
+         * @return the due timestamp of this token life from now on
          */
         public long due() {
             return due(seconds);
@@ -87,20 +87,24 @@ public class Token implements Serializable {
         return cache;
     }
 
-    public String oid;
-    public boolean expired;
-    public long due;
-    void setExpired() {
-        expired = true;
+    private String id;
+    private long due;
+    private List<String> payload = new ArrayList<String>();
+
+    public String id() {
+        return id;
     }
-    public List<String> payload = new ArrayList<String>();
+
+    public boolean expired() {
+        return due <= $.ms();
+    }
 
     /**
      * Check if the token contains an ID or not
      * @return {@code true} if the token contains a ID
      */
     public boolean isEmpty() {
-        return S.isBlank(oid);
+        return S.isBlank(id);
     }
 
     /**
@@ -108,19 +112,19 @@ public class Token implements Serializable {
      * @return {@code true} if the token is expired
      */
     public boolean consumed() {
-        return cache().get("auth-tk-consumed-" + (oid + due)) != null;
+        return cache().get("auth-tk-consumed-" + (id + due)) != null;
     }
 
     /**
      * Make a token to be consumed
      */
     public void consume() {
-        cache().put("auth-tk-consumed-" + (oid + due), "true", (int)(due + 1000 - System.currentTimeMillis())/1000);
+        cache().put("auth-tk-consumed-" + (id + due), "true", (int)(due + 1000 - System.currentTimeMillis())/1000);
     }
 
     @Override
     public int hashCode() {
-        return $.hc(oid, due, payload);
+        return $.hc(id, due, payload);
     }
 
     @Override
@@ -128,7 +132,7 @@ public class Token implements Serializable {
         if (obj == this) return true;
         if (obj instanceof Token) {
             Token that = (Token)obj;
-            return S.eq(that.oid, this.oid) && that.due == this.due && $.eq(that.payload, this.payload);
+            return S.eq(that.id, this.id) && that.due == this.due && $.eq(that.payload, this.payload);
         }
 
         return false;
@@ -136,7 +140,7 @@ public class Token implements Serializable {
 
     @Override
     public String toString() {
-        return S.fmt("{oid: %s, expired: %s, due: %s, payload: %s", oid, expired, due, payload);
+        return S.fmt("{id: %s, expired: %s, due: %s, payload: %s", id, expired(), due, payload);
     }
 
     /**
@@ -203,16 +207,14 @@ public class Token implements Serializable {
         }
         String[] sa = s.split("\\|");
         if (sa.length < 2) return tk;
-        tk.oid = sa[0];
+        tk.id = sa[0];
         try {
-            long due = Long.parseLong(sa[1]);
-            tk.due = due;
-            if (due <= System.currentTimeMillis()) {
-                tk.setExpired();
+            tk.due = Long.parseLong(sa[1]);
+            if (tk.expired()) {
                 return tk;
             }
         } catch (Exception e) {
-            tk.setExpired();
+            tk.due = $.ms() - 1000 * 60 * 60 * 24;
             return tk;
         }
         if (sa.length > 2) {
@@ -229,6 +231,7 @@ public class Token implements Serializable {
      * @param token the token string
      * @return {@code true} if the token is valid
      */
+    @SuppressWarnings("unused")
     public static boolean isTokenValid(String secret, String oid, String token) {
         if (S.anyBlank(oid, token)) {
             return false;
