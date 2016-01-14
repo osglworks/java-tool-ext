@@ -91,8 +91,20 @@ public class Token implements Serializable {
     private long due;
     private List<String> payload = new ArrayList<String>();
 
+    /**
+     * Return the ID of the token
+     * @return the token ID
+     */
     public String id() {
         return id;
+    }
+
+    /**
+     * Return the payload of the token
+     * @return the token payload
+     */
+    public List<String> payload() {
+        return C.list(payload);
     }
 
     public boolean expired() {
