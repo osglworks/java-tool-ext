@@ -179,7 +179,7 @@ public class Token implements Serializable {
         List<String> l = new ArrayList<String>(2 + payload.length);
         l.add(oid);
         l.add(String.valueOf(due));
-        l.addAll(Arrays.asList(payload));
+        l.addAll(C.listOf(payload));
         String s = S.join("|", l);
         return Crypto.encryptAES(s, secret);
     }
@@ -197,7 +197,7 @@ public class Token implements Serializable {
         List<String> l = new ArrayList<String>(2 + payload.length);
         l.add(oid);
         l.add(String.valueOf(due));
-        l.addAll(Arrays.asList(payload));
+        l.addAll(C.listOf(payload));
         String s = S.join("|", l);
         return Crypto.encryptAES(s, secret);
     }
@@ -231,7 +231,7 @@ public class Token implements Serializable {
         }
         if (sa.length > 2) {
             sa = Arrays.copyOfRange(sa, 2, sa.length);
-            tk.payload.addAll(Arrays.asList(sa));
+            tk.payload.addAll(C.listOf(sa));
         }
         return tk;
     }
