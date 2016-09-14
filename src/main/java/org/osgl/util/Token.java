@@ -44,7 +44,12 @@ public class Token implements Serializable {
          * Long life token live for 90 days
          */
         LONG(60 * 60 * 24 * 90),
-        NINETY_DAYS(60 * 60 * 24 * 90);
+        NINETY_DAYS(60 * 60 * 24 * 90),
+        /**
+         * Never expire token
+         */
+        FOREVER(-1)
+        ;
 
         private long seconds;
 
@@ -53,7 +58,10 @@ public class Token implements Serializable {
         }
 
         /**
-         * Return the due time in time millis
+         * Return the due time in time millis.
+         *
+         * Note `0` or negative number means never due
+         *
          * @return the due timestamp of this token life from now on
          */
         public long due() {
@@ -61,6 +69,9 @@ public class Token implements Serializable {
         }
 
         static long due(long seconds) {
+            if (seconds <= 0) {
+                return -1;
+            }
             long now = System.currentTimeMillis();
             long period = seconds * 1000;
             return now + period;
@@ -108,7 +119,7 @@ public class Token implements Serializable {
     }
 
     public boolean expired() {
-        return due <= $.ms();
+        return due > 0 && due <= $.ms();
     }
 
     /**
@@ -175,13 +186,7 @@ public class Token implements Serializable {
      * @return an encrypted token string that is expiring in {@link Life#SHORT} time period
      */
     public static String generateToken(String secret, Life tl, String oid, String... payload) {
-        long due = tl.due();
-        List<String> l = new ArrayList<String>(2 + payload.length);
-        l.add(oid);
-        l.add(String.valueOf(due));
-        l.addAll(C.listOf(payload));
-        String s = S.join("|", l);
-        return Crypto.encryptAES(s, secret);
+        return generateToken(secret, tl.due(), oid, payload);
     }
 
     /**
@@ -254,7 +259,7 @@ public class Token implements Serializable {
         if (!S.isEqual(oid, sa[0])) return false;
         try {
             long due = Long.parseLong(sa[1]);
-            return (due > System.currentTimeMillis());
+            return (due < 1 || due > System.currentTimeMillis());
         } catch (Exception e) {
             return false;
         }
