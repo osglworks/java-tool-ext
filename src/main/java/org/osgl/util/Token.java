@@ -1,5 +1,6 @@
 package org.osgl.util;
 
+import org.apache.commons.codec.Charsets;
 import org.osgl.$;
 import org.osgl.cache.CacheService;
 import org.osgl.cache.CacheServiceProvider;
@@ -167,14 +168,43 @@ public class Token implements Serializable {
     }
 
     /**
+     * This method is deprecated. Please use {@link #generateToken(byte[], String, String...)} instead
+     *
      * Generate a token string with secret key, ID and optionally payloads
      * @param secret the secret to encrypt to token string
      * @param oid the ID of the token (could be customer ID etc)
      * @param payload the payload optionally indicate more information
      * @return an encrypted token string that is expiring in {@link Life#SHORT} time period
      */
+    @Deprecated
     public static String generateToken(String secret, String oid, String... payload) {
         return generateToken(secret, Life.SHORT, oid, payload);
+    }
+
+    /**
+     * Generate a token string with secret key, ID and optionally payloads
+     * @param secret the secret to encrypt to token string
+     * @param oid the ID of the token (could be customer ID etc)
+     * @param payload the payload optionally indicate more information
+     * @return an encrypted token string that is expiring in {@link Life#SHORT} time period
+     */
+    public static String generateToken(byte[] secret, String oid, String... payload) {
+        return generateToken(secret, Life.SHORT, oid, payload);
+    }
+
+    /**
+     * This method is deprecated, please use {@link #generateToken(byte[], Life, String, String...)} instead
+     *
+     * Generate a token string with secret key, ID and optionally payloads
+     * @param secret the secret to encrypt to token string
+     * @param tl the expiration of the token
+     * @param oid the ID of the token (could be customer ID etc)
+     * @param payload the payload optionally indicate more information
+     * @return an encrypted token string that is expiring in {@link Life#SHORT} time period
+     */
+    @Deprecated
+    public static String generateToken(String secret, Life tl, String oid, String... payload) {
+        return generateToken(secret, tl.due(), oid, payload);
     }
 
     /**
@@ -185,8 +215,23 @@ public class Token implements Serializable {
      * @param payload the payload optionally indicate more information
      * @return an encrypted token string that is expiring in {@link Life#SHORT} time period
      */
-    public static String generateToken(String secret, Life tl, String oid, String... payload) {
+    public static String generateToken(byte[] secret, Life tl, String oid, String... payload) {
         return generateToken(secret, tl.due(), oid, payload);
+    }
+
+    /**
+     * This method is deprecated. please use {@link #generateToken(byte[], long, String, String...)} instead
+     *
+     * Generate a token string with secret key, ID and optionally payloads
+     * @param secret the secret to encrypt to token string
+     * @param seconds the expiration of the token in seconds
+     * @param oid the ID of the token (could be customer ID etc)
+     * @param payload the payload optionally indicate more information
+     * @return an encrypted token string that is expiring in {@link Life#SHORT} time period
+     */
+    @Deprecated
+    public static String generateToken(String secret, long seconds, String oid, String... payload) {
+        return generateToken(secret.getBytes(Charsets.UTF_8), seconds, oid, payload);
     }
 
     /**
@@ -197,7 +242,7 @@ public class Token implements Serializable {
      * @param payload the payload optionally indicate more information
      * @return an encrypted token string that is expiring in {@link Life#SHORT} time period
      */
-    public static String generateToken(String secret, long seconds, String oid, String... payload) {
+    public static String generateToken(byte[] secret, long seconds, String oid, String... payload) {
         long due = Life.due(seconds);
         List<String> l = new ArrayList<String>(2 + payload.length);
         l.add(oid);
