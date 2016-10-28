@@ -253,12 +253,25 @@ public class Token implements Serializable {
     }
 
     /**
+     * This method is deprecated. Please use {@link #parseToken(byte[], String)} instead
+     *
      * Parse a token string into token object
      * @param token the token string
      * @param secret the secret to decrypt the token string
      * @return a token instance parsed from the string
      */
+    @Deprecated
     public static Token parseToken(String secret, String token) {
+        return parseToken(secret.getBytes(Charsets.UTF_8), token);
+    }
+
+    /**
+     * Parse a token string into token object
+     * @param token the token string
+     * @param secret the secret to decrypt the token string
+     * @return a token instance parsed from the string
+     */
+    public static Token parseToken(byte[] secret, String token) {
         Token tk = new Token();
         if (S.blank(token)) return tk;
         String s = "";
@@ -287,6 +300,21 @@ public class Token implements Serializable {
     }
 
     /**
+     * This method is deprecated. Please use {@link #isTokenValid(byte[], String, String)} instead
+     *
+     * Check if a string is a valid token
+     * @param secret the secret to decrypt the string
+     * @param oid the ID supposed to be encapsulated in the token
+     * @param token the token string
+     * @return {@code true} if the token is valid
+     */
+    @Deprecated
+    @SuppressWarnings("unused")
+    public static boolean isTokenValid(String secret, String oid, String token) {
+        return isTokenValid(secret.getBytes(Charsets.UTF_8), oid, token);
+    }
+
+    /**
      * Check if a string is a valid token
      * @param secret the secret to decrypt the string
      * @param oid the ID supposed to be encapsulated in the token
@@ -294,7 +322,7 @@ public class Token implements Serializable {
      * @return {@code true} if the token is valid
      */
     @SuppressWarnings("unused")
-    public static boolean isTokenValid(String secret, String oid, String token) {
+    public static boolean isTokenValid(byte[] secret, String oid, String token) {
         if (S.anyBlank(oid, token)) {
             return false;
         }
