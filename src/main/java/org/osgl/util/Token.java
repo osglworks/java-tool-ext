@@ -119,8 +119,24 @@ public class Token implements Serializable {
         return C.list(payload);
     }
 
+    /**
+     * Alias of {@link #expired()}
+     * @return `true` if the token {@link #expired() is expired}
+     */
+    public boolean isExpired() {
+        return expired();
+    }
+
     public boolean expired() {
         return due > 0 && due <= $.ms();
+    }
+
+    /**
+     * Alias of {@link #isEmpty()}
+     * @return if the token is empty
+     */
+    public boolean empty() {
+        return isEmpty();
     }
 
     /**
@@ -132,18 +148,55 @@ public class Token implements Serializable {
     }
 
     /**
+     * Alias of {@link #consumed()}
+     * @return `true` if the token is {@link #consumed() is consumed}
+     */
+    public boolean isConsumed() {
+        return consumed();
+    }
+
+    /**
      * Check if the token is consumed or not
-     * @return {@code true} if the token is expired
+     * @return {@code true} if the token {@link #consume() marked as consumed}
      */
     public boolean consumed() {
         return cache().get("auth-tk-consumed-" + (id + due)) != null;
     }
 
     /**
-     * Make a token to be consumed
+     * Mark a token to be consumed
      */
     public void consume() {
         cache().put("auth-tk-consumed-" + (id + due), "true", (int)(due + 1000 - System.currentTimeMillis())/1000);
+    }
+
+    /**
+     * Alias of {@link #isValid()}
+     * @return `true` if the token {@link #isValid() is valid}
+     */
+    public boolean valid() {
+        return isValid();
+    }
+
+    /**
+     * Check if the token is valid.
+     *
+     * A token is considered to be valid when none of the following criteria met:
+     * * token {@link #isEmpty() is empty}
+     * * token {@link #consumed() is consumed}
+     * * token {@link #expired() is expired}
+     * @return
+     */
+    public boolean isValid() {
+        return !isEmpty() && !expired() && !consumed();
+    }
+
+    /**
+     * Check if the token is NOT valid
+     * @return `true` if the token is not {@link #isValid()}
+     */
+    public boolean notValid() {
+        return !isValid();
     }
 
     @Override
