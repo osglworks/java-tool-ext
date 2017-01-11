@@ -120,6 +120,25 @@ public class Token implements Serializable {
     }
 
     /**
+     * Returns the first payload or null if no payload found
+     * @return the first payload for `null`
+     */
+    public String firstPayload() {
+        return payload.isEmpty() ? null : payload.get(0);
+    }
+
+    /**
+     * Returns a payload at `index` or `null` if no payload found
+     * there
+     *
+     * @param index the index to fetch the payload
+     * @return the payload at the position or `null` if not available
+     */
+    public String payload(int index) {
+        return payload.size() > index ? payload.get(index) : null;
+    }
+
+    /**
      * Alias of {@link #expired()}
      * @return `true` if the token {@link #expired() is expired}
      */

@@ -17,6 +17,8 @@
 <!-- history
 0.0.2-SNAPSHOT
 - add Token.isValid() api
+- add Token.firstPayload() api
+- add Token.payload(int) api
 0.0.1-SNAPSHOT
 - base version when history log started
 -->
