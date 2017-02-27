@@ -1,6 +1,5 @@
 package org.osgl.util;
 
-import org.apache.commons.codec.Charsets;
 import org.osgl.$;
 import org.osgl.cache.CacheService;
 import org.osgl.cache.CacheServiceProvider;
