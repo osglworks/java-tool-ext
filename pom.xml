@@ -20,7 +20,6 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.osgl</groupId>
     <artifactId>osgl-tool-ext</artifactId>
     <packaging>jar</packaging>
     <version>1.1.1-SNAPSHOT</version>
@@ -37,7 +36,7 @@
 
     <properties>
         <scm.url>git@github.com:osglworks/java-tool-ext.git</scm.url>
-        <osgl-tool.version>1.5.0</osgl-tool.version>
+        <osgl-tool.version>1.8.0</osgl-tool.version>
         <osgl-logging.version>1.1.0</osgl-logging.version>
         <osgl-cache.version>1.1.0</osgl-cache.version>
         <spring.version>3.2.6.RELEASE</spring.version>
