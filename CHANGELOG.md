@@ -1,5 +1,8 @@
 # OSGL Tool-Ext Change Log
 
+1.1.4 - 19/May/2018
+- update osgl-tool to 1.13.1
+
 1.1.3 - 02/Apr/2018
 - update osgl-tool to 1.9.0
 
