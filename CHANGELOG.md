@@ -1,5 +1,9 @@
 # OSGL Tool-Ext Change Log
 
+1.3.1
+* Token.generateToken issue #1
+* update osgl-tool to 1.18.3
+
 1.3.0 - 30/Oct/2018
 * update osgl-tool to 1.18.0
 

@@ -295,7 +295,7 @@ public class Token implements Serializable {
      */
     @Deprecated
     public static String generateToken(String secret, Life tl, String oid, String... payload) {
-        return generateToken(secret, tl.due(), oid, payload);
+        return generateToken(secret, tl.seconds, oid, payload);
     }
 
     /**
@@ -307,7 +307,7 @@ public class Token implements Serializable {
      * @return an encrypted token string that is expiring in {@link Life#SHORT} time period
      */
     public static String generateToken(byte[] secret, Life tl, String oid, String... payload) {
-        return generateToken(secret, tl.due(), oid, payload);
+        return generateToken(secret, tl.seconds, oid, payload);
     }
 
     /**
