@@ -38,8 +38,7 @@
         <scm.url>git@github.com:osglworks/java-tool-ext.git</scm.url>
         <osgl-tool.version>1.19.2</osgl-tool.version>
         <osgl-logging.version>1.4.0</osgl-logging.version>
-        <osgl-cache.version>1.6.0</osgl-cache.version>
-        <spring.version>3.2.18.RELEASE</spring.version>
+        <osgl-cache.version>1.7.0</osgl-cache.version>
     </properties>
 
     <scm>
