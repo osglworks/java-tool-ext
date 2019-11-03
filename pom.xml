@@ -22,7 +22,7 @@
 
     <artifactId>osgl-tool-ext</artifactId>
     <packaging>jar</packaging>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.5.0-SNAPSHOT</version>
 
     <name>OSGL Tool Extension</name>
     <description>Some extensions to osgl-tool project</description>
@@ -36,9 +36,9 @@
 
     <properties>
         <scm.url>git@github.com:osglworks/java-tool-ext.git</scm.url>
-        <osgl-tool.version>1.19.2</osgl-tool.version>
-        <osgl-logging.version>1.4.0</osgl-logging.version>
-        <osgl-cache.version>1.7.0</osgl-cache.version>
+        <osgl-tool.version>1.21.0</osgl-tool.version>
+        <osgl-logging.version>1.5.0</osgl-logging.version>
+        <osgl-cache.version>1.8.0</osgl-cache.version>
     </properties>
 
     <scm>

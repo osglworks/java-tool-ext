@@ -43,7 +43,7 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 public class Token implements Serializable {
-    public static enum Life {
+    public enum Life {
         /**
          * very short life token that live for only 1 min
          */
